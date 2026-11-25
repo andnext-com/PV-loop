@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-title" content="PVループ">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>P-Vループ シミュレーター</title>
+<style>
+/*
+VOICE: 臨床的・静か。麻酔科医が手術室で使う教材。
+IDEA: 生体モニターの圧波形紙。白地に細い格子、心室ループだけが赤。
+PICTURE: 大きなP-V平面。ESPVR・EDPVR・Ea線と基準ループ(灰)と現在ループ(赤)。
+COLOUR and TYPE: 白/墨 #111、信号赤 #e4002b、灰1色。Archivo(数値)+Noto Sans JP。
+LAYOUT: 図を左大きく、右にスライダー列、下に指標の時刻表風の行。600px未満で縦積み。
+*/
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0e0e0e);--ink:light-dark(#111,#eee);--mut:light-dark(#6b6b6b,#9a9a9a);--grid:light-dark(#ececec,#1f1f1f);--line:light-dark(#d4d4d4,#333);--red:#e4002b;--ghost:light-dark(#b9b9b9,#555);--fill:light-dark(rgba(228,0,43,.07),rgba(228,0,43,.16))}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,3vw,44px) max(4vw,16px);max-width:1320px;margin:0 auto}
+h1{font:800 clamp(28px,4vw,44px)/1.05 "Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;font-stretch:112%;margin:0 0 6px;text-wrap:balance;border-top:6px solid var(--ink);padding-top:14px}
+.sub{color:var(--mut);margin:0 0 18px;font-size:14px}
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:28px;align-items:start}
+.fig{position:relative;min-height:440px;aspect-ratio:1.12}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mut);margin-top:8px}
+.legend i{display:inline-block;width:18px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+button{font:500 14px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+button:hover{border-color:var(--ink)}button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.grp{font:700 13px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin:16px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.ctl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;align-items:baseline;padding:4px 0}
+.ctl label{font-size:14px}.ctl output{font:600 16px "Helvetica Neue",Arial,sans-serif;white-space:nowrap;text-align:right}
+.ctl output small{font:400 12px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin-left:3px}
+.ctl input{grid-column:1/-1;width:100%;height:28px;accent-color:var(--red)}
+.ctl .hint{grid-column:1/-1;font-size:12px;color:var(--mut);margin-top:-4px}
+.row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.met{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));border-top:3px solid var(--ink);margin-top:26px}
+.m{padding:12px 12px 12px 0;border-bottom:1px solid var(--line)}
+.m b{display:block;font:700 clamp(26px,3vw,34px)/1.1 "Helvetica Neue",Arial,sans-serif;font-stretch:108%;white-space:nowrap}
+.m b small{font:400 13px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin-left:4px}
+.m span{font-size:13px;color:var(--mut)}
+.m em{font-style:normal;font:600 13px "Helvetica Neue",Arial,sans-serif;margin-left:6px}
+.up{color:var(--red)}.dn{color:#1f6fd1}
+details{margin-top:26px;font-size:14px;color:var(--mut);max-width:78ch}
+details summary{cursor:pointer;color:var(--ink);font-weight:500;min-height:32px}
+.note{font-size:12px;color:var(--mut);margin-top:10px}
+@media(max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.fig{min-height:340px}}
+@media(prefers-reduced-motion:no-preference){#cur{transition:none}}
+</style>
+</head>
+<body>
+<div class="band">
+<h1>圧容量ループ シミュレーター</h1>
+<p class="sub">前負荷・後負荷・収縮性・拡張能を動かして、左室P-Vループと血行動態の変化を見る。灰色は基準ループ。</p>
+
+<div class="main">
+ <div>
+  <div class="fig" id="fig"><svg id="svg" role="img" aria-label="左室圧容量ループ"></svg></div>
+  <div class="legend">
+   <span><i style="border-color:var(--red)"></i>現在のループ</span>
+   <span><i style="border-color:var(--ghost)"></i>基準（ループ・ESPVR・EDPVR・Ea）</span>
+   <span><i style="border-color:var(--ink)"></i>ESPVR（傾き Ees）</span>
+   <span><i style="border-color:var(--mut);border-top-style:dashed"></i>EDPVR</span>
+   <span><i style="border-color:#1f6fd1;border-top-style:dotted"></i>Ea（実効動脈エラスタンス）</span>
+  </div>
+ </div>
+
+ <div>
+  <div class="presets" id="presets"></div>
+  <div id="ctls"></div>
+  <div class="row">
+   <button id="pin" type="button">現在を基準ループに固定</button>
+   <button id="reset" type="button">正常値に戻す</button>
+  </div>
+ </div>
+</div>
+
+<div class="met" id="met"></div>
+
+<details>
+ <summary>モデルの中身</summary>
+ <p>時変エラスタンスの簡易定常モデル。EDPVR は P = 0.5·(e<sup>k(V−30)</sup> − 1)、前負荷（LVEDP）から EDV を求める。収縮末期点は ESPVR：Pes = Ees·(ESV − V0) と、実効動脈エラスタンス Ea = R·HR/60 の交点（Pes = Ea·SV）。平均血圧 ≈ CO·R、脈圧 ≈ SV/C として収縮期・拡張期血圧を推定し、大動脈弁開放圧を拡張期血圧とした。一回仕事量（SW）はループ面積、PVA = SW + ½·Pes·(ESV − V0)。</p>
+ <p>弁膜症、心室間相互作用、圧反射、心拍数による拡張充満時間の変化は含まない。数値は教育用の目安で、個々の患者の値を予測するものではない。</p>
+</details>
+<p class="note">表示値はこのモデルによる計算値。</p>
+</div>
+
+<script>
+{
+const N={edp:8,k:.03,ees:2,v0:10,r:1.1,c:1.5,hr:70};
+const CT=[
+ {g:'前負荷・拡張能'},
+ {id:'edp',l:'左室拡張末期圧 LVEDP',u:'mmHg',min:2,max:30,st:1,d:0,h:'輸液で↑、脱水・出血で↓'},
+ {id:'k',l:'拡張期スティフネス k',u:'/mL',min:.012,max:.07,st:.001,d:3,h:'肥大・虚血・高齢で↑（EDPVRが急峻に）'},
+ {g:'収縮性'},
+ {id:'ees',l:'収縮末期エラスタンス Ees',u:'mmHg/mL',min:.4,max:5,st:.1,d:1,h:'カテコラミンで↑、心不全・吸入麻酔薬で↓'},
+ {id:'v0',l:'ESPVR 容量切片 V0',u:'mL',min:0,max:60,st:1,d:0},
+ {g:'後負荷・心拍数'},
+ {id:'r',l:'体血管抵抗 R',u:'mmHg·s/mL',min:.4,max:2.6,st:.05,d:2,h:'血管収縮薬で↑、血管拡張・敗血症で↓'},
+ {id:'c',l:'大動脈コンプライアンス C',u:'mL/mmHg',min:.5,max:3,st:.1,d:1,h:'加齢・動脈硬化で↓（脈圧↑）'},
+ {id:'hr',l:'心拍数 HR',u:'bpm',min:40,max:160,st:1,d:0}
+];
+const PR=[
+ ['正常',{}],
+ ['収縮不全',{ees:.8,edp:20,v0:25,hr:85}],
+ ['拡張障害',{k:.052,edp:18}],
+ ['循環血液量減少',{edp:3,hr:105}],
+ ['血管拡張（麻酔導入）',{r:.65,ees:1.6,edp:6}],
+ ['α刺激薬',{r:1.65}],
+ ['β刺激薬',{ees:3.2,hr:100,r:.9}],
+ ['輸液負荷',{edp:14}]
+];
+let p={...N},base=null;
+const $=s=>document.querySelector(s);
+
+$('#ctls').innerHTML=CT.map(c=>c.g?`<div class="grp">${c.g}</div>`:
+ `<div class="ctl"><label for="${c.id}">${c.l}</label><output id="o-${c.id}"></output>
+  <input type="range" id="${c.id}" min="${c.min}" max="${c.max}" step="${c.st}">${c.h?`<div class="hint">${c.h}</div>`:''}</div>`).join('');
+$('#presets').innerHTML=PR.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="false">${x[0]}</button>`).join('');
+
+const A=.5,VD=30;
+const edpvr=v=>Math.max(0,A*(Math.exp(p.k*(v-VD))-1));
+function model(q){
+ const edv=VD+Math.log(q.edp/A+1)/q.k;
+ const ea=q.r*q.hr/60;
+ let esv=(ea*edv+q.ees*q.v0)/(ea+q.ees);
+ const sv=Math.max(0,edv-esv), pes=q.ees*(esv-q.v0);
+ const co=sv*q.hr/1000, map=sv*q.hr/60*q.r, pp=sv/q.c;
+ let sbp=map+pp*2/3, dbp=Math.max(q.edp+2,map-pp/3);
+ sbp=Math.max(sbp,pes,dbp);
+ // loop
+ const pts=[];const fill=v=>A*(Math.exp(q.k*(v-VD))-1);
+ const n=40;
+ for(let i=0;i<=n;i++){const s=i/n;pts.push([edv,q.edp+(dbp-q.edp)*s]);} // IVC
+ const lin=s=>dbp+(pes-dbp)*s, bump=s=>Math.sin(Math.PI*Math.pow(s,.7));
+ let lo=0,hi=400;
+ for(let it=0;it<40;it++){const h=(lo+hi)/2;let m=-1;for(let i=0;i<=80;i++){const s=i/80;m=Math.max(m,lin(s)+h*bump(s));}m>sbp?hi=h:lo=h;}
+ const h=sbp>Math.max(dbp,pes)?lo:0;
+ for(let i=1;i<=n;i++){const s=i/n;pts.push([edv-sv*(1-Math.pow(1-s,1.6)),lin(s)+h*bump(s)]);} // ejection
+ const pmin=Math.max(0,fill(esv));
+ for(let i=1;i<=n;i++){const s=i/n;pts.push([esv,pes+(pmin-pes)*s]);} // IVR
+ for(let i=1;i<=n;i++){const v=esv+(edv-esv)*i/n;pts.push([v,Math.max(0,fill(v))]);} // filling
+ let sw=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];sw+=a[0]*b[1]-b[0]*a[1];}
+ sw=Math.abs(sw)/2;
+ const pe=.5*pes*Math.max(0,esv-q.v0), pva=sw+pe;
+ return{edv,esv,sv,ef:edv?sv/edv*100:0,pes,ea,co,map,sbp,dbp,sw,pva,eff:pva?sw/pva*100:0,cpl:ea/q.ees,pts};
+}
+
+const svg=$('#svg'),VX=260,PY=200;
+function draw(){
+ const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;
+ const nar=W<520,L=nar?40:56,R=14,T=14,B=nar?40:50;
+ const x=v=>L+(v/VX)*(W-L-R), y=P=>T+(1-P/PY)*(H-T-B);
+ const cl=P=>Math.min(PY,Math.max(0,P));
+ const m=model(p),g=base?model(base):null;
+ let s='<defs><clipPath id="cp"><rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'"/></clipPath></defs>';
+ const vs=[];for(let v=0;v<=VX;v+=nar?50:25)vs.push(v);
+ const ps=[];for(let P=0;P<=PY;P+=nar?50:25)ps.push(P);
+ s+=vs.map(v=>`<line x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H-B}" stroke="var(--grid)"/>`).join('');
+ s+=ps.map(P=>`<line x1="${L}" x2="${W-R}" y1="${y(P)}" y2="${y(P)}" stroke="var(--grid)"/>`).join('');
+ s+=`<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink)"/><line x1="${L}" x2="${L}" y1="${T}" y2="${H-B}" stroke="var(--ink)"/>`;
+ s+=vs.filter(v=>v%50==0).map(v=>`<text x="${x(v)}" y="${H-B+18}" font-size="12" text-anchor="middle" fill="var(--mut)" font-family="Helvetica Neue",Arial,sans-serif>${v}</text>`).join('');
+ s+=ps.filter(P=>P%50==0).map(P=>`<text x="${L-8}" y="${y(P)+4}" font-size="12" text-anchor="end" fill="var(--mut)" font-family="Helvetica Neue",Arial,sans-serif>${P}</text>`).join('');
+ s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="13" text-anchor="middle" fill="var(--ink)">左室容量 (mL)</text>`;
+ s+=`<text transform="translate(13 ${(T+H-B)/2}) rotate(-90)" font-size="13" text-anchor="middle" fill="var(--ink)">左室圧 (mmHg)</text>`;
+ s+='<g clip-path="url(#cp)">';
+ // 基準の関係線（薄く）
+ if(g){
+  const bq=base,bf=v=>Math.max(0,A*(Math.exp(bq.k*(v-VD))-1));
+  let be='';for(let v=VD;v<=VX;v+=2)be+=(be?'L':'M')+x(v)+' '+y(cl(bf(v)));
+  s+=`<path d="${be}" fill="none" stroke="var(--ghost)" stroke-dasharray="5 4" stroke-width="1.5" opacity=".8"/>`;
+  s+=`<line x1="${x(bq.v0)}" y1="${y(0)}" x2="${x(bq.v0+PY/bq.ees)}" y2="${y(PY)}" stroke="var(--ghost)" stroke-width="1.5" opacity=".8"/>`;
+  s+=`<line x1="${x(g.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(g.ea*g.edv)}" stroke="var(--ghost)" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+ }
+ // EDPVR
+ let e='';for(let v=VD;v<=VX;v+=2)e+=(e?'L':'M')+x(v)+' '+y(cl(edpvr(v)));
+ s+=`<path d="${e}" fill="none" stroke="var(--mut)" stroke-dasharray="5 4" stroke-width="1.5"/>`;
+ // ESPVR
+ const vtop=p.v0+PY/p.ees;
+ s+=`<line x1="${x(p.v0)}" y1="${y(0)}" x2="${x(vtop)}" y2="${y(PY)}" stroke="var(--ink)" stroke-width="1.5"/>`;
+ // Ea
+ const eaI=m.ea*m.edv; // 縦軸切片 = Ea·EDV
+ s+=`<line x1="${x(m.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(eaI)}" stroke="#1f6fd1" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+ if(eaI<=PY)s+=`<circle cx="${x(0)}" cy="${y(eaI)}" r="3.5" fill="#1f6fd1"/>`+(nar?'':`<text x="${x(0)+8}" y="${y(eaI)-6}" font-size="12" fill="#1f6fd1">Ea·EDV = ${Math.round(eaI)}</text>`);
+ const path=pts=>'M'+pts.map(q=>x(q[0])+' '+y(cl(q[1]))).join('L')+'Z';
+ if(g)s+=`<path d="${path(g.pts)}" fill="none" stroke="var(--ghost)" stroke-width="2"/>`;
+ s+=`<path id="cur" d="${path(m.pts)}" fill="var(--fill)" stroke="var(--red)" stroke-width="2.6" stroke-linejoin="round"/>`;
+ s+='</g>';
+ const dot=(v,P,t,anc,dx,dy)=>`<circle cx="${x(v)}" cy="${y(cl(P))}" r="4" fill="var(--red)"/>`+(nar?'':`<text x="${x(v)+dx}" y="${y(cl(P))+dy}" font-size="12" fill="var(--ink)" text-anchor="${anc}">${t}</text>`);
+ s+=dot(m.esv,m.pes,'収縮末期','end',-8,-8);
+ s+=dot(m.edv,p.edp,'拡張末期','start',8,-6);
+ if(!nar){
+  s+=`<text x="${x(Math.min(vtop,VX))-4}" y="${y(Math.min(PY,p.ees*(VX-p.v0)))+16}" font-size="12" fill="var(--ink)" text-anchor="end">ESPVR</text>`;
+  s+=`<text x="${x(VX)-4}" y="${y(cl(edpvr(VX)))-6}" font-size="12" fill="var(--mut)" text-anchor="end">EDPVR</text>`;
+ }
+ svg.innerHTML=s;
+}
+const ro=new ResizeObserver(draw);ro.observe(svg);
+
+const f=(v,d)=>v.toFixed(d);
+const MT=[
+ ['sv','一回拍出量 SV','mL',0],['ef','駆出率 EF','%',0],['co','心拍出量 CO','L/min',1],
+ ['bp','血圧 収縮期/拡張期','mmHg'],['map','平均血圧 MAP','mmHg',0],
+ ['edv','拡張末期容量 EDV','mL',0],['esv','収縮末期容量 ESV','mL',0],['pes','収縮末期圧 Pes','mmHg',0],
+ ['ea','Ea','mmHg/mL',2],['cpl','Ea/Ees（カップリング）','',2],
+ ['sw','一回仕事量 SW','J',2],['eff','機械効率 SW/PVA','%',0]
+];
+function upd(){
+ for(const c of CT)if(c.id){const el=$('#'+c.id);el.value=p[c.id];
+  let t=f(p[c.id],c.d);if(c.id=='r')t+=`<small>${c.u} ≈ ${Math.round(p.r*1333)} dyn</small>`;else t+=`<small>${c.u}</small>`;
+  $('#o-'+c.id).innerHTML=t;}
+ const m=model(p),b=base?model(base):null;
+ const val=(m,k)=>k=='sw'?m.sw*1.333e-4:m[k];
+ $('#met').innerHTML=MT.map(([k,l,u,d])=>{
+  let main,dl='';
+  if(k=='bp')main=`${Math.round(m.sbp)}/${Math.round(m.dbp)}`;
+  else{const v=val(m,k);main=f(v,d);
+   if(b){const dv=v-val(b,k);if(Math.abs(dv)>=Math.pow(10,-d)/2)dl=`<em class="${dv>0?'up':'dn'}">${dv>0?'+':'−'}${f(Math.abs(dv),d)}</em>`;}}
+  return `<div class="m"><span>${l}</span><b>${main}${u?`<small>${u}</small>`:''}</b>${dl?`<span>基準比</span>${dl}`:''}</div>`;}).join('');
+ draw();
+}
+document.addEventListener('input',e=>{if(e.target.type=='range'){p[e.target.id]=+e.target.value;mark(-1);upd();}});
+function mark(i){document.querySelectorAll('#presets button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.i==i));}
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;p={...N,...PR[i][1]};mark(i);upd();});
+$('#pin').addEventListener('click',()=>{base={...p};upd();});
+$('#reset').addEventListener('click',()=>{p={...N};mark(0);upd();});
+base={...N};mark(0);upd();
+}
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
