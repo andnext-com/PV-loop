@@ -17,65 +17,85 @@
 VOICE: 臨床的・静か。麻酔科医が手術室で使う教材。
 IDEA: 生体モニターの圧波形紙。白地に細い格子、心室ループだけが赤。
 PICTURE: 大きなP-V平面。ESPVR・EDPVR・Ea線と基準ループ(灰)と現在ループ(赤)。
-COLOUR and TYPE: 白/墨 #111、信号赤 #e4002b、灰1色。Archivo(数値)+Noto Sans JP。
-LAYOUT: 図を左大きく、右にスライダー列、下に指標の時刻表風の行。600px未満で縦積み。
+COLOUR and TYPE: 白/墨 #111、信号赤 #e4002b、灰1色。端末の日本語ゴシック+Helvetica系数字。
+LAYOUT: 図を左大きく、右にモード・病態・スライダー列、下に指標。860px未満で縦積み。
 */
-:root{color-scheme:light dark;--bg:light-dark(#fff,#0e0e0e);--ink:light-dark(#111,#eee);--mut:light-dark(#6b6b6b,#9a9a9a);--grid:light-dark(#ececec,#1f1f1f);--line:light-dark(#d4d4d4,#333);--red:#e4002b;--ghost:light-dark(#b9b9b9,#555);--fill:light-dark(rgba(228,0,43,.07),rgba(228,0,43,.16))}
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0e0e0e);--ink:light-dark(#111,#eee);--mut:light-dark(#6b6b6b,#9a9a9a);--grid:light-dark(#ececec,#1f1f1f);--line:light-dark(#d4d4d4,#333);--red:#e4002b;--blue:#1f6fd1;--ghost:light-dark(#b9b9b9,#555);--fill:light-dark(rgba(228,0,43,.07),rgba(228,0,43,.16));--jp:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;--num:"Helvetica Neue",Arial,var(--jp)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--jp);overflow-x:clip}
 .band{padding:clamp(20px,3vw,44px) max(4vw,16px);max-width:1320px;margin:0 auto}
-h1{font:800 clamp(28px,4vw,44px)/1.05 "Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;font-stretch:112%;margin:0 0 6px;text-wrap:balance;border-top:6px solid var(--ink);padding-top:14px}
+h1{font:800 clamp(28px,4vw,44px)/1.05 var(--jp);margin:0 0 6px;text-wrap:balance;border-top:6px solid var(--ink);padding-top:14px}
 .sub{color:var(--mut);margin:0 0 18px;font-size:14px}
 .main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:28px;align-items:start}
-.fig{position:relative;min-height:440px;aspect-ratio:1.12}
+#vlabel{font-size:13px;color:var(--mut);margin:0 0 6px}
+#vlabel b{color:var(--ink);font-weight:700}
+.fig{position:relative;aspect-ratio:1.12;max-height:640px}
 .fig>svg{position:absolute;inset:0;width:100%;height:100%}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mut);margin-top:8px}
 .legend i{display:inline-block;width:18px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
-.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-button{font:500 14px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif,system-ui,sans-serif;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink);border-radius:5px;overflow:hidden;margin-bottom:12px}
+.tabs button{border:0;border-radius:0;min-height:44px;font-weight:700}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.lab{font:700 13px var(--jp);color:var(--mut);margin:0 0 6px}
+button{font:500 14px var(--jp);min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
 button:hover{border-color:var(--ink)}button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#presets button[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 button:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-.grp{font:700 13px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin:16px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px}
+#lnote{font-size:13px;line-height:1.6;margin:0 0 12px;padding:8px 10px;border-left:3px solid var(--red);background:light-dark(#fafafa,#161616)}
+.grp{font:700 13px var(--jp);color:var(--mut);margin:16px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px}
 .ctl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;align-items:baseline;padding:4px 0}
-.ctl label{font-size:14px}.ctl output{font:600 16px "Helvetica Neue",Arial,sans-serif;white-space:nowrap;text-align:right}
-.ctl output small{font:400 12px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin-left:3px}
+.ctl label{font-size:14px}.ctl output{font:600 16px var(--num);white-space:nowrap;text-align:right}
+.ctl output small{font:400 12px var(--jp);color:var(--mut);margin-left:3px}
 .ctl input{grid-column:1/-1;width:100%;height:28px;accent-color:var(--red)}
 .ctl .hint{grid-column:1/-1;font-size:12px;color:var(--mut);margin-top:-4px}
 .row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .met{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));border-top:3px solid var(--ink);margin-top:26px}
 .m{padding:12px 12px 12px 0;border-bottom:1px solid var(--line)}
-.m b{display:block;font:700 clamp(26px,3vw,34px)/1.1 "Helvetica Neue",Arial,sans-serif;font-stretch:108%;white-space:nowrap}
-.m b small{font:400 13px "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,"Noto Sans JP",system-ui,sans-serif;color:var(--mut);margin-left:4px}
+.m b{display:block;font:700 clamp(26px,3vw,34px)/1.1 var(--num);white-space:nowrap}
+.m b small{font:400 13px var(--jp);color:var(--mut);margin-left:4px}
 .m span{font-size:13px;color:var(--mut)}
-.m em{font-style:normal;font:600 13px "Helvetica Neue",Arial,sans-serif;margin-left:6px}
-.up{color:var(--red)}.dn{color:#1f6fd1}
-details{margin-top:26px;font-size:14px;color:var(--mut);max-width:78ch}
+.m em{font-style:normal;font:600 13px var(--num);margin-left:6px}
+.m.key b{color:var(--red)}
+.up{color:var(--red)}.dn{color:var(--blue)}
+details{margin-top:26px;font-size:14px;color:var(--mut);max-width:80ch}
 details summary{cursor:pointer;color:var(--ink);font-weight:500;min-height:32px}
 .note{font-size:12px;color:var(--mut);margin-top:10px}
-@media(max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.fig{min-height:340px}}
-@media(prefers-reduced-motion:no-preference){#cur{transition:none}}
+[hidden]{display:none!important}
+@media(max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.fig{aspect-ratio:.95}}
 </style>
 </head>
 <body>
 <div class="band">
 <h1>圧容量ループ シミュレーター</h1>
-<p class="sub">前負荷・後負荷・収縮性・拡張能を動かして、左室P-Vループと血行動態の変化を見る。灰色は基準ループ。</p>
+<p class="sub">前負荷・後負荷・収縮性・拡張能、小児では短絡や肺血管抵抗を動かして、心室のP-Vループと血行動態の変化を見る。灰色は基準。</p>
 
 <div class="main">
  <div>
-  <div class="fig" id="fig"><svg id="svg" role="img" aria-label="左室圧容量ループ"></svg></div>
+  <p id="vlabel"></p>
+  <div class="fig" id="fig"><svg id="svg" role="img" aria-label="心室圧容量ループ"></svg></div>
   <div class="legend">
    <span><i style="border-color:var(--red)"></i>現在のループ</span>
    <span><i style="border-color:var(--ghost)"></i>基準（ループ・ESPVR・EDPVR・Ea）</span>
    <span><i style="border-color:var(--ink)"></i>ESPVR（傾き Ees）</span>
    <span><i style="border-color:var(--mut);border-top-style:dashed"></i>EDPVR</span>
-   <span><i style="border-color:#1f6fd1;border-top-style:dotted"></i>Ea（実効動脈エラスタンス）</span>
+   <span><i style="border-color:var(--blue);border-top-style:dotted"></i>Ea（実効動脈エラスタンス）</span>
   </div>
  </div>
 
  <div>
-  <div class="presets" id="presets"></div>
+  <div class="tabs" id="modes">
+   <button type="button" data-m="a" aria-pressed="true">成人</button>
+   <button type="button" data-m="p" aria-pressed="false">小児・先天性心疾患</button>
+  </div>
+  <div id="pedtop" hidden>
+   <p class="lab">病態</p>
+   <div class="btns" id="lesions"></div>
+  </div>
+  <p class="lab" id="sclab">プリセット</p>
+  <div class="btns" id="presets"></div>
+  <p id="lnote" hidden></p>
   <div id="ctls"></div>
   <div class="row">
    <button id="pin" type="button">現在を基準ループに固定</button>
@@ -88,16 +108,24 @@ details summary{cursor:pointer;color:var(--ink);font-weight:500;min-height:32px}
 
 <details>
  <summary>モデルの中身</summary>
- <p>時変エラスタンスの簡易定常モデル。EDPVR は P = 0.5·(e<sup>k(V−30)</sup> − 1)、前負荷（LVEDP）から EDV を求める。収縮末期点は ESPVR：Pes = Ees·(ESV − V0) と、実効動脈エラスタンス Ea = R·HR/60 の交点（Pes = Ea·SV）。平均血圧 ≈ CO·R、脈圧 ≈ SV/C として収縮期・拡張期血圧を推定し、大動脈弁開放圧を拡張期血圧とした。一回仕事量（SW）はループ面積、PVA = SW + ½·Pes·(ESV − V0)。</p>
- <p>弁膜症、心室間相互作用、圧反射、心拍数による拡張充満時間の変化は含まない。数値は教育用の目安で、個々の患者の値を予測するものではない。</p>
+ <p><b>共通</b>：時変エラスタンスの簡易定常モデル。EDPVR は P = 0.5·(e<sup>k(V−Vd)</sup> − 1)、拡張末期圧から EDV を求める。収縮末期点は ESPVR：Pes = Ees·(ESV − V0) と実効動脈エラスタンス Ea の交点（Pes = Ea·SV）。平均血圧 = 体血流 × 体血管抵抗、脈圧 ≈ 大動脈への一回拍出量 / C。一回仕事量（SW）はループ面積、PVA = SW + ½·Pes·(ESV − V0)。</p>
+ <p><b>小児</b>：体表面積 BSA = (4W+7)/(W+90)。容量は BSA/1.73 倍に縮め、Ees・EDPVR・大動脈コンプライアンスは体重ごとの正常心拍数・平均血圧に合うよう調整（体格正常比 100% がその体重の正常）。血管抵抗は WU·m²（係数）で入力し、R = 係数/BSA に換算。</p>
+ <p><b>短絡</b>：VSD・PDA は Qp/Qs = 1 + (SVR − PVR)/(短絡路抵抗 + PVR)。PVR &gt; SVR では右左短絡。VSD は収縮早期から右室へ駆出するため等容収縮期が傾く。PDA は大動脈から収縮期・拡張期とも流出するため拡張期血圧が下がる。TOF は右室を表示し、右室は体血管抵抗に対して駆出、Qp/Qs = SVR/(RVOT抵抗 + PVR)。並列循環の単心室は Qp/Qs = SVR/(シャント抵抗 + PVR)。Fontan は 心室拡張末期圧 = Fontan圧 − 肺血流 × PVR を満たす点を求める。</p>
+ <p><b>SaO₂</b>：完全混合を仮定し、肺静脈血 98%、Hb 15 g/dL、酸素消費量 130 mL/min/m² で計算（並列循環：SaO₂ = 98% − VO₂/(1.36·Hb·Qp)）。</p>
+ <p>弁逆流、心室間相互作用、圧反射、心拍数による充満時間の変化、肺静脈還流と前負荷の自動的な連動は含まない（前負荷は拡張末期圧スライダーで与える）。数値は教育用の目安で、個々の患者の値を予測するものではない。</p>
 </details>
 <p class="note">表示値はこのモデルによる計算値。</p>
 </div>
 
 <script>
 {
-const N={edp:8,k:.03,ees:2,v0:10,r:1.1,c:1.5,hr:70};
-const CT=[
+const $=s=>document.querySelector(s);
+const A=.5,SPV=.98,KO2=1.36*15*10;
+const interp=(t,x)=>{if(x<=t[0][0])return t[0][1];for(let i=1;i<t.length;i++)if(x<=t[i][0]){const[a,b]=t[i-1],[c,d]=t[i];return b+(d-b)*(x-a)/(c-a)}return t[t.length-1][1]};
+
+/* ---------- 成人 ---------- */
+const NA={mode:'a',edp:8,k:.03,ees:2,v0:10,r:1.1,c:1.5,hr:70};
+const CTA=[
  {g:'前負荷・拡張能'},
  {id:'edp',l:'左室拡張末期圧 LVEDP',u:'mmHg',min:2,max:30,st:1,d:0,h:'輸液で↑、脱水・出血で↓'},
  {id:'k',l:'拡張期スティフネス k',u:'/mL',min:.012,max:.07,st:.001,d:3,h:'肥大・虚血・高齢で↑（EDPVRが急峻に）'},
@@ -105,135 +133,270 @@ const CT=[
  {id:'ees',l:'収縮末期エラスタンス Ees',u:'mmHg/mL',min:.4,max:5,st:.1,d:1,h:'カテコラミンで↑、心不全・吸入麻酔薬で↓'},
  {id:'v0',l:'ESPVR 容量切片 V0',u:'mL',min:0,max:60,st:1,d:0},
  {g:'後負荷・心拍数'},
- {id:'r',l:'体血管抵抗 R',u:'mmHg·s/mL',min:.4,max:2.6,st:.05,d:2,h:'血管収縮薬で↑、血管拡張・敗血症で↓'},
+ {id:'r',l:'体血管抵抗 R',u:'mmHg·s/mL',min:.4,max:2.6,st:.05,d:2,h:'血管収縮薬で↑、血管拡張・敗血症で↓',x:q=>' ≈ '+Math.round(q.r*1333)+' dyn'},
  {id:'c',l:'大動脈コンプライアンス C',u:'mL/mmHg',min:.5,max:3,st:.1,d:1,h:'加齢・動脈硬化で↓（脈圧↑）'},
  {id:'hr',l:'心拍数 HR',u:'bpm',min:40,max:160,st:1,d:0}
 ];
-const PR=[
- ['正常',{}],
- ['収縮不全',{ees:.8,edp:20,v0:25,hr:85}],
- ['拡張障害',{k:.052,edp:18}],
- ['循環血液量減少',{edp:3,hr:105}],
- ['血管拡張（麻酔導入）',{r:.65,ees:1.6,edp:6}],
- ['α刺激薬',{r:1.65}],
- ['β刺激薬',{ees:3.2,hr:100,r:.9}],
- ['輸液負荷',{edp:14}]
-];
-let p={...N},base=null;
-const $=s=>document.querySelector(s);
+const PRA=[['正常',{}],['収縮不全',{ees:.8,edp:20,v0:25,hr:85}],['拡張障害',{k:.052,edp:18}],['循環血液量減少',{edp:3,hr:105}],['血管拡張（麻酔導入）',{r:.65,ees:1.6,edp:6}],['α刺激薬',{r:1.65}],['β刺激薬',{ees:3.2,hr:100,r:.9}],['輸液負荷',{edp:14}]];
 
-$('#ctls').innerHTML=CT.map(c=>c.g?`<div class="grp">${c.g}</div>`:
- `<div class="ctl"><label for="${c.id}">${c.l}</label><output id="o-${c.id}"></output>
-  <input type="range" id="${c.id}" min="${c.min}" max="${c.max}" step="${c.st}">${c.h?`<div class="hint">${c.h}</div>`:''}</div>`).join('');
-$('#presets').innerHTML=PR.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="false">${x[0]}</button>`).join('');
-
-const A=.5,VD=30;
-const edpvr=v=>Math.max(0,A*(Math.exp(p.k*(v-VD))-1));
-function model(q){
- const edv=VD+Math.log(q.edp/A+1)/q.k;
- const ea=q.r*q.hr/60;
- let esv=(ea*edv+q.ees*q.v0)/(ea+q.ees);
- const sv=Math.max(0,edv-esv), pes=q.ees*(esv-q.v0);
- const co=sv*q.hr/1000, map=sv*q.hr/60*q.r, pp=sv/q.c;
- let sbp=map+pp*2/3, dbp=Math.max(q.edp+2,map-pp/3);
- sbp=Math.max(sbp,pes,dbp);
- // loop
- const pts=[];const fill=v=>A*(Math.exp(q.k*(v-VD))-1);
- const n=40;
- for(let i=0;i<=n;i++){const s=i/n;pts.push([edv,q.edp+(dbp-q.edp)*s]);} // IVC
- const lin=s=>dbp+(pes-dbp)*s, bump=s=>Math.sin(Math.PI*Math.pow(s,.7));
- let lo=0,hi=400;
- for(let it=0;it<40;it++){const h=(lo+hi)/2;let m=-1;for(let i=0;i<=80;i++){const s=i/80;m=Math.max(m,lin(s)+h*bump(s));}m>sbp?hi=h:lo=h;}
- const h=sbp>Math.max(dbp,pes)?lo:0;
- for(let i=1;i<=n;i++){const s=i/n;pts.push([edv-sv*(1-Math.pow(1-s,1.6)),lin(s)+h*bump(s)]);} // ejection
- const pmin=Math.max(0,fill(esv));
- for(let i=1;i<=n;i++){const s=i/n;pts.push([esv,pes+(pmin-pes)*s]);} // IVR
- for(let i=1;i<=n;i++){const v=esv+(edv-esv)*i/n;pts.push([v,Math.max(0,fill(v))]);} // filling
- let sw=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];sw+=a[0]*b[1]-b[0]*a[1];}
- sw=Math.abs(sw)/2;
- const pe=.5*pes*Math.max(0,esv-q.v0), pva=sw+pe;
- return{edv,esv,sv,ef:edv?sv/edv*100:0,pes,ea,co,map,sbp,dbp,sw,pva,eff:pva?sw/pva*100:0,cpl:ea/q.ees,pts};
+/* ---------- 小児 ---------- */
+function norm(W){
+ const bsa=(4*W+7)/(W+90),f=bsa/1.73;
+ const hr=interp([[2,145],[3,140],[10,115],[20,95],[40,80],[70,70]],W);
+ const map=interp([[2,42],[3,45],[10,60],[20,68],[40,78],[70,89]],W);
+ const ees=2*(map/90)/f,k=.03/f,vd=30*f,v0=10*f,c=1.5*f*(90/map);
+ const edv=vd+Math.log(6/A+1)/k;
+ const ea=map*ees/(ees*(edv-v0)-map);
+ return{W,bsa,f,hr,map,ees,k,vd,v0,c,edv,svri:ea*60/hr/.06*bsa};
+}
+const LES={
+ normal:{t:'正常',W:10,v:'左室',d:{},
+  n:'体重を動かすと、その体格の正常な容量・心拍数・血圧に合わせてループが縮尺される。',
+  sc:[['正常',{}],['循環血液量減少',{edp:2,hrm:1.2}],['心機能低下',{eesr:45,edp:14,hrm:1.15}],['麻酔導入（血管拡張）',{svrim:.65,eesr:85}]]},
+ vsd:{t:'VSD',W:5,v:'左室',d:{edp:10,kr:70,pvri:5,rd:.5},
+  n:'左室は収縮早期から欠損孔を通って右室・肺動脈へも駆出するため、等容収縮期がなくなりループの右辺が傾く。PVRが下がるほど肺血流が増え、体血流は減る。',
+  sc:[['大きなVSD',{}],['PVR低下（酸素・過換気）',{pvri:3}],['PVR上昇（低酸素・高CO₂）',{pvri:10,edp:6}],['制限型VSD',{rd:25,edp:7,kr:100}],['PVR＞SVR（右左短絡）',{pvri:16,kr:100,edp:7}]]},
+ pda:{t:'PDA',W:3,v:'左室',d:{edp:9,kr:80,pvri:4,rd:6},
+  n:'大動脈から肺動脈へ収縮期も拡張期も血液が流れ込むため、拡張期血圧が下がり脈圧が広がる。左室は肺から戻る血液で容量負荷になる。',
+  sc:[['中等度PDA',{}],['大きなPDA',{rd:1.5}],['PVR低下',{pvri:2}],['PPHN（右左短絡）',{pvri:18,edp:6,kr:100}]]},
+ tof:{t:'TOF',W:6,v:'右室',d:{eesr:130,kr:150,pvri:2,rrvot:20},
+  n:'表示は右室。右室は大きなVSDを通して大動脈へ直接駆出し、体血圧と同じ圧を出す。Qp/Qs は SVR と 右室流出路狭窄＋PVR の比で決まり、SVR低下や漏斗部攣縮で右左短絡が増える（無酸素発作）。',
+  sc:[['安定時',{}],['無酸素発作',{rrvot:38,hrm:1.25,svrim:.8,edp:4}],['発作＋フェニレフリン',{rrvot:38,hrm:1.25,svrim:1.4,edp:4}],['発作＋輸液・鎮静',{rrvot:30,svrim:.9,edp:9}]]},
+ sv:{t:'単心室（並列循環）',W:3.5,v:'単心室',d:{edp:8,kr:80,pvri:3,rd:10,svrim:1.3},
+  n:'Norwood/BTシャント術後や動脈管依存の単心室。1つの心室が体循環と肺循環へ並列に駆出し、SVR と シャント＋PVR の比で Qp/Qs が決まる。心室は常に容量負荷。',
+  sc:[['バランス良好',{}],['SVR上昇',{svrim:2}],['PVR低下（高FiO₂・過換気）',{pvri:1}],['PVR上昇（低酸素・高CO₂）',{pvri:10}],['心室機能低下',{eesr:55,edp:13}]]},
+ fontan:{t:'Fontan',W:15,v:'単心室',d:{cvp:13,pvri:2,eesr:80,kr:130},
+  n:'肺へ送るポンプがないため、心室の前負荷は Fontan圧（中心静脈圧）− 肺血流 × PVR で決まる。PVRが上がると前負荷が落ち、拍出量が減る。拡張末期圧は計算で決まる。',
+  sc:[['安定時',{}],['PVR上昇（低換気・陽圧換気）',{pvri:4.5}],['脱水',{cvp:9}],['輸液負荷',{cvp:16}],['心室機能低下',{eesr:45}]]}
+};
+function lesState(les,W,o={}){
+ const N=norm(W);
+ const q={mode:'p',les,W,edp:6,eesr:100,kr:100,cr:100,hr:N.hr,svri:N.svri,pvri:2,rd:0,rrvot:0,cvp:12,...LES[les].d,...o};
+ if(q.svrim){q.svri*=q.svrim;delete q.svrim}
+ if(q.hrm){q.hr*=q.hrm;delete q.hrm}
+ q.hr=Math.round(q.hr);
+ return q;
+}
+function ctlP(q){
+ const L=q.les,c=[{g:'体格'},{id:'W',l:'体重',u:'kg',min:2,max:50,st:.5,d:1,x:q=>' ・ BSA '+norm(q.W).bsa.toFixed(2)+' m²'},{g:'前負荷・拡張能'}];
+ if(L=='fontan')c.push({id:'cvp',l:'Fontan圧（中心静脈圧）',u:'mmHg',min:4,max:25,st:.5,d:1,h:'輸液で↑、脱水・出血で↓'});
+ else c.push({id:'edp',l:'心室拡張末期圧',u:'mmHg',min:2,max:25,st:.5,d:1,h:'輸液で↑、脱水・出血で↓'});
+ c.push({id:'kr',l:'拡張期スティフネス（体格正常比）',u:'%',min:40,max:300,st:5,d:0,h:'肥大で↑、容量負荷による拡大で↓'},
+  {g:'収縮性'},{id:'eesr',l:'収縮性 Ees（体格正常比）',u:'%',min:30,max:250,st:5,d:0,x:q=>' = '+vent(q).ees.toFixed(1)+' mmHg/mL',h:'カテコラミンで↑、心不全・吸入麻酔薬で↓'},
+  {g:'血管抵抗・短絡'},{id:'svri',l:'体血管抵抗係数 SVRI',u:'WU·m²',min:3,max:40,st:.5,d:1,h:'血管収縮薬で↑、麻酔・血管拡張で↓'});
+ if(L!='normal')c.push({id:'pvri',l:'肺血管抵抗係数 PVRI',u:'WU·m²',min:.5,max:30,st:.5,d:1,h:'低酸素・高CO₂・アシドーシス・陽圧で↑、酸素・過換気・NOで↓'});
+ if(L=='vsd')c.push({id:'rd',l:'欠損孔の抵抗',u:'WU·m²',min:0,max:40,st:.5,d:1,h:'0 に近いほど大きな非制限型の欠損'});
+ if(L=='pda')c.push({id:'rd',l:'動脈管の抵抗',u:'WU·m²',min:0,max:40,st:.5,d:1,h:'0 に近いほど太い動脈管'});
+ if(L=='sv')c.push({id:'rd',l:'BTシャント（体肺短絡）の抵抗',u:'WU·m²',min:1,max:40,st:.5,d:1,h:'シャントが細いほど↑'});
+ if(L=='tof')c.push({id:'rrvot',l:'右室流出路狭窄の抵抗',u:'WU·m²',min:0,max:60,st:.5,d:1,h:'漏斗部攣縮・頻脈・脱水で↑、β遮断・鎮静・輸液で↓'});
+ c.push({g:'心拍数・大動脈'},{id:'hr',l:'心拍数',u:'bpm',min:60,max:220,st:1,d:0},
+  {id:'cr',l:'大動脈コンプライアンス（体格正常比）',u:'%',min:40,max:200,st:5,d:0});
+ return c;
 }
 
-const svg=$('#svg'),VX=260,PY=200;
+/* ---------- モデル ---------- */
+function vent(q){
+ if(q.mode=='a')return{ees:q.ees,v0:q.v0,k:q.k,vd:30};
+ const N=norm(q.W);
+ return{ees:N.ees*q.eesr/100,v0:N.v0,k:N.k*q.kr/100,vd:N.vd,N};
+}
+const edpvr=(V,v)=>Math.max(0,A*(Math.exp(V.k*(v-V.vd))-1));
+function core(V,edp,ea){
+ const edv=V.vd+Math.log(edp/A+1)/V.k;
+ let esv=Math.min(edv,(ea*edv+V.ees*V.v0)/(ea+V.ees));
+ return{edv,esv,sv:Math.max(0,edv-esv),pes:Math.max(0,V.ees*(esv-V.v0))};
+}
+function loop(V,c,edp,popen,sbp,vIVC){
+ const pts=[],n=40,{edv,esv,pes}=c,sv=edv-esv;
+ popen=Math.max(popen,edp+1);
+ const v1=edv-Math.min(vIVC,sv*.6);
+ for(let i=0;i<=n;i++){const s=i/n;pts.push([edv-(edv-v1)*s,edp+(popen-edp)*s])}
+ const lin=s=>popen+(pes-popen)*s,bump=s=>Math.sin(Math.PI*Math.pow(s,.7));
+ let lo=0,hi=400;
+ for(let it=0;it<40;it++){const h=(lo+hi)/2;let m=-1;for(let i=0;i<=80;i++){const s=i/80;m=Math.max(m,lin(s)+h*bump(s))}m>sbp?hi=h:lo=h}
+ const h=sbp>Math.max(popen,pes)?lo:0;
+ for(let i=1;i<=n;i++){const s=i/n;pts.push([v1-(v1-esv)*(1-Math.pow(1-s,1.6)),lin(s)+h*bump(s)])}
+ const pmin=edpvr(V,esv);
+ for(let i=1;i<=n;i++){const s=i/n;pts.push([esv,pes+(pmin-pes)*s])}
+ for(let i=1;i<=n;i++){const v=esv+(edv-esv)*i/n;pts.push([v,edpvr(V,v)])}
+ let sw=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];sw+=a[0]*b[1]-b[0]*a[1]}
+ return{pts,sw:Math.abs(sw)/2};
+}
+function finish(o,V,c){
+ o.edv=c.edv;o.esv=c.esv;o.sv=c.sv;o.pes=c.pes;o.ef=c.edv?c.sv/c.edv*100:0;o.V=V;
+ o.cpl=o.ea/V.ees;
+ const pe=.5*c.pes*Math.max(0,c.esv-V.v0);o.pva=o.sw+pe;o.eff=o.pva?o.sw/o.pva*100:0;
+ return o;
+}
+function modelA(q){
+ const V=vent(q),ea=q.r*q.hr/60,c=core(V,q.edp,ea);
+ const map=c.pes,pp=c.sv/q.c;
+ const dbp=Math.max(q.edp+2,map-pp/3),sbp=Math.max(map+pp*2/3,c.pes,dbp);
+ const L=loop(V,c,q.edp,dbp,sbp,0);
+ return finish({ea,co:c.sv*q.hr/1000,map,sbp,dbp,edp:q.edp,pts:L.pts,sw:L.sw},V,c);
+}
+function modelP(q){
+ const V=vent(q),N=V.N,bsa=N.bsa,toR=w=>w/bsa*.06;
+ const Rs=toR(q.svri),Rp=toR(q.pvri),Rd=toR(q.rd),Rv=toR(q.rrvot),L=q.les,hr=q.hr;
+ let m=1,r=0,dir='';
+ if(L=='vsd'||L=='pda'){const x=(Rs-Rp)/(Rd+Rp);if(x>=0){r=x;m=1/(1+r);dir='左右短絡'}else{r=(Rp-Rs)/(Rd+Rs);m=1+r;dir='右左短絡'}}
+ if(L=='sv'){r=Rs/(Rd+Rp);m=1/(1+r)}
+ const ea=Rs*hr/60*m;
+ let edp=q.edp;
+ if(L=='fontan'){
+  const g=e=>e-(q.cvp-core(V,e,ea).sv*hr/60*Rp);
+  let lo=.3,hi=Math.max(.31,q.cvp);
+  if(g(lo)>=0)edp=lo;else{for(let i=0;i<50;i++){const e=(lo+hi)/2;g(e)>0?hi=e:lo=e}edp=(lo+hi)/2}
+ }
+ const c=core(V,edp,ea),qv=c.sv*hr/60;
+ const VO2=130*bsa,Lm=x=>x*.06;
+ let qs=qv,qp=qv,svAo=c.sv,vIVC=0,sa=SPV,ppa=null,grad=null,tpg=null;
+ if(L=='vsd'||L=='pda'){
+  if(dir=='左右短絡'){qs=qv/(1+r);qp=qv;svAo=L=='vsd'?c.sv/(1+r):c.sv;if(L=='vsd')vIVC=(c.sv-svAo)*.35}
+  else{qp=qv;const qrl=qv*r;qs=qv+qrl;svAo=L=='vsd'?c.sv*(1+r):c.sv*(1+r);sa=SPV-(qrl/qp)*VO2/(KO2*Lm(qs))}
+  ppa=qp*Rp;
+ }else if(L=='tof'){
+  qs=qv;qp=qs*Rs/(Rv+Rp);
+  if(qp<qs){dir='右左短絡';sa=SPV-((qs-qp)/qp)*VO2/(KO2*Lm(qs))}else dir='左右短絡';
+  grad=qp*Rv;ppa=qp*Rp;
+ }else if(L=='sv'){
+  qs=qv/(1+r);qp=qv*r/(1+r);sa=SPV-VO2/(KO2*Lm(qp));ppa=qp*Rp;
+ }else if(L=='fontan'){tpg=qv*Rp}
+ sa=Math.max(.2,Math.min(SPV,sa));
+ const C=N.c*q.cr/100,map=qs*Rs,pp=svAo/C;
+ const dbp=Math.max(edp+2,map-pp/3),sbp=Math.max(map+pp*2/3,c.pes,dbp);
+ const Lp=loop(V,c,edp,dbp,sbp,vIVC);
+ return finish({ea,co:Lm(qv),qs:Lm(qs),ci:Lm(qs)/bsa,qpqs:qp/qs,dir,sa:sa*100,ppa,grad,tpg,map,sbp,dbp,edp,pts:Lp.pts,sw:Lp.sw,bsa},V,c);
+}
+const model=q=>q.mode=='a'?modelA(q):modelP(q);
+
+/* ---------- 状態 ---------- */
+let mode='a',pa={...NA},ba={...NA},pp=lesState('normal',10),bp={...pp},presetA=0,presetP=0;
+const cur=()=>mode=='a'?pa:pp,base=()=>mode=='a'?ba:bp;
+
+/* ---------- 描画 ---------- */
+const svg=$('#svg');
+const niceStep=x=>{const e=10**Math.floor(Math.log10(x));for(const m of[1,2,2.5,5,10])if(m*e>=x)return m*e};
+const niceUp=x=>{const e=10**Math.floor(Math.log10(x));for(const m of[1,1.2,1.5,2,2.5,3,4,5,6,8,10])if(m*e>=x)return m*e};
+function axes(){if(mode=='a')return{VX:260,PY:200};const N=norm(pp.W);return{VX:niceUp(N.edv*2.3),PY:niceUp(Math.max(80,N.map*2.3))}}
 function draw(){
  const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;
- const nar=W<520,L=nar?40:56,R=14,T=14,B=nar?40:50;
- const x=v=>L+(v/VX)*(W-L-R), y=P=>T+(1-P/PY)*(H-T-B);
- const cl=P=>Math.min(PY,Math.max(0,P));
- const m=model(p),g=base?model(base):null;
- let s='<defs><clipPath id="cp"><rect x="'+L+'" y="'+T+'" width="'+(W-L-R)+'" height="'+(H-T-B)+'"/></clipPath></defs>';
- const vs=[];for(let v=0;v<=VX;v+=nar?50:25)vs.push(v);
- const ps=[];for(let P=0;P<=PY;P+=nar?50:25)ps.push(P);
- s+=vs.map(v=>`<line x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H-B}" stroke="var(--grid)"/>`).join('');
- s+=ps.map(P=>`<line x1="${L}" x2="${W-R}" y1="${y(P)}" y2="${y(P)}" stroke="var(--grid)"/>`).join('');
+ const nar=W<520,L=nar?40:56,R=14,T=14,B=nar?40:50,{VX,PY}=axes();
+ const x=v=>L+(v/VX)*(W-L-R),y=P=>T+(1-P/PY)*(H-T-B),cl=P=>Math.min(PY,Math.max(0,P));
+ const q=cur(),m=model(q),g=model(base()),V=m.V,G=g.V;
+ const sx=niceStep(VX/11),sy=niceStep(PY/9),fx=sx<1?1:0;
+ let s=`<defs><clipPath id="cp"><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}"/></clipPath></defs>`;
+ for(let i=0,v=0;v<=VX+1e-9;i++,v=i*sx){s+=`<line x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H-B}" stroke="var(--grid)"/>`;if(i%2==0)s+=`<text x="${x(v)}" y="${H-B+18}" font-size="12" text-anchor="middle" fill="var(--mut)">${+v.toFixed(fx)}</text>`}
+ for(let i=0,P=0;P<=PY+1e-9;i++,P=i*sy){s+=`<line x1="${L}" x2="${W-R}" y1="${y(P)}" y2="${y(P)}" stroke="var(--grid)"/>`;if(i%2==0)s+=`<text x="${L-8}" y="${y(P)+4}" font-size="12" text-anchor="end" fill="var(--mut)">${P}</text>`}
  s+=`<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink)"/><line x1="${L}" x2="${L}" y1="${T}" y2="${H-B}" stroke="var(--ink)"/>`;
- s+=vs.filter(v=>v%50==0).map(v=>`<text x="${x(v)}" y="${H-B+18}" font-size="12" text-anchor="middle" fill="var(--mut)" font-family="Helvetica Neue",Arial,sans-serif>${v}</text>`).join('');
- s+=ps.filter(P=>P%50==0).map(P=>`<text x="${L-8}" y="${y(P)+4}" font-size="12" text-anchor="end" fill="var(--mut)" font-family="Helvetica Neue",Arial,sans-serif>${P}</text>`).join('');
- s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="13" text-anchor="middle" fill="var(--ink)">左室容量 (mL)</text>`;
- s+=`<text transform="translate(13 ${(T+H-B)/2}) rotate(-90)" font-size="13" text-anchor="middle" fill="var(--ink)">左室圧 (mmHg)</text>`;
+ const vn=mode=='a'?'左室':LES[pp.les].v;
+ s+=`<text x="${(L+W-R)/2}" y="${H-6}" font-size="13" text-anchor="middle" fill="var(--ink)">${vn}容量 (mL)</text>`;
+ s+=`<text transform="translate(13 ${(T+H-B)/2}) rotate(-90)" font-size="13" text-anchor="middle" fill="var(--ink)">${vn}圧 (mmHg)</text>`;
  s+='<g clip-path="url(#cp)">';
- // 基準の関係線（薄く）
- if(g){
-  const bq=base,bf=v=>Math.max(0,A*(Math.exp(bq.k*(v-VD))-1));
-  let be='';for(let v=VD;v<=VX;v+=2)be+=(be?'L':'M')+x(v)+' '+y(cl(bf(v)));
-  s+=`<path d="${be}" fill="none" stroke="var(--ghost)" stroke-dasharray="5 4" stroke-width="1.5" opacity=".8"/>`;
-  s+=`<line x1="${x(bq.v0)}" y1="${y(0)}" x2="${x(bq.v0+PY/bq.ees)}" y2="${y(PY)}" stroke="var(--ghost)" stroke-width="1.5" opacity=".8"/>`;
-  s+=`<line x1="${x(g.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(g.ea*g.edv)}" stroke="var(--ghost)" stroke-width="1.5" stroke-dasharray="2 4"/>`;
- }
- // EDPVR
- let e='';for(let v=VD;v<=VX;v+=2)e+=(e?'L':'M')+x(v)+' '+y(cl(edpvr(v)));
- s+=`<path d="${e}" fill="none" stroke="var(--mut)" stroke-dasharray="5 4" stroke-width="1.5"/>`;
- // ESPVR
- const vtop=p.v0+PY/p.ees;
- s+=`<line x1="${x(p.v0)}" y1="${y(0)}" x2="${x(vtop)}" y2="${y(PY)}" stroke="var(--ink)" stroke-width="1.5"/>`;
- // Ea
- const eaI=m.ea*m.edv; // 縦軸切片 = Ea·EDV
- s+=`<line x1="${x(m.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(eaI)}" stroke="#1f6fd1" stroke-width="1.5" stroke-dasharray="2 4"/>`;
- if(eaI<=PY)s+=`<circle cx="${x(0)}" cy="${y(eaI)}" r="3.5" fill="#1f6fd1"/>`+(nar?'':`<text x="${x(0)+8}" y="${y(eaI)-6}" font-size="12" fill="#1f6fd1">Ea·EDV = ${Math.round(eaI)}</text>`);
- const path=pts=>'M'+pts.map(q=>x(q[0])+' '+y(cl(q[1]))).join('L')+'Z';
- if(g)s+=`<path d="${path(g.pts)}" fill="none" stroke="var(--ghost)" stroke-width="2"/>`;
- s+=`<path id="cur" d="${path(m.pts)}" fill="var(--fill)" stroke="var(--red)" stroke-width="2.6" stroke-linejoin="round"/>`;
+ const curve=V=>{let e='';const st=VX/300;for(let v=V.vd;v<=VX;v+=st){const P=edpvr(V,v);e+=(e?'L':'M')+x(v)+' '+y(cl(P));if(P>PY)break}return e};
+ // 基準（薄く）
+ s+=`<path d="${curve(G)}" fill="none" stroke="var(--ghost)" stroke-dasharray="5 4" stroke-width="1.5" opacity=".8"/>`;
+ s+=`<line x1="${x(G.v0)}" y1="${y(0)}" x2="${x(G.v0+PY/G.ees)}" y2="${y(PY)}" stroke="var(--ghost)" stroke-width="1.5" opacity=".8"/>`;
+ s+=`<line x1="${x(g.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(g.ea*g.edv)}" stroke="var(--ghost)" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+ // 現在
+ s+=`<path d="${curve(V)}" fill="none" stroke="var(--mut)" stroke-dasharray="5 4" stroke-width="1.5"/>`;
+ s+=`<line x1="${x(V.v0)}" y1="${y(0)}" x2="${x(V.v0+PY/V.ees)}" y2="${y(PY)}" stroke="var(--ink)" stroke-width="1.5"/>`;
+ const eaI=m.ea*m.edv;
+ s+=`<line x1="${x(m.edv)}" y1="${y(0)}" x2="${x(0)}" y2="${y(eaI)}" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+ const path=pts=>'M'+pts.map(p=>x(p[0])+' '+y(cl(p[1]))).join('L')+'Z';
+ s+=`<path d="${path(g.pts)}" fill="none" stroke="var(--ghost)" stroke-width="2"/>`;
+ s+=`<path d="${path(m.pts)}" fill="var(--fill)" stroke="var(--red)" stroke-width="2.6" stroke-linejoin="round"/>`;
  s+='</g>';
+ if(eaI<=PY)s+=`<circle cx="${x(0)}" cy="${y(eaI)}" r="3.5" fill="var(--blue)"/>`+(nar?'':`<text x="${x(0)+8}" y="${y(eaI)-6}" font-size="12" fill="var(--blue)">Ea·EDV = ${Math.round(eaI)}</text>`);
  const dot=(v,P,t,anc,dx,dy)=>`<circle cx="${x(v)}" cy="${y(cl(P))}" r="4" fill="var(--red)"/>`+(nar?'':`<text x="${x(v)+dx}" y="${y(cl(P))+dy}" font-size="12" fill="var(--ink)" text-anchor="${anc}">${t}</text>`);
- s+=dot(m.esv,m.pes,'収縮末期','end',-8,-8);
- s+=dot(m.edv,p.edp,'拡張末期','start',8,-6);
+ s+=dot(m.esv,m.pes,'収縮末期','end',-8,-8)+dot(m.edv,m.edp,'拡張末期','start',8,-6);
  if(!nar){
-  s+=`<text x="${x(Math.min(vtop,VX))-4}" y="${y(Math.min(PY,p.ees*(VX-p.v0)))+16}" font-size="12" fill="var(--ink)" text-anchor="end">ESPVR</text>`;
-  s+=`<text x="${x(VX)-4}" y="${y(cl(edpvr(VX)))-6}" font-size="12" fill="var(--mut)" text-anchor="end">EDPVR</text>`;
+  const vt=V.v0+PY/V.ees;
+  s+=vt<=VX?`<text x="${x(vt)-4}" y="${T+14}" font-size="12" fill="var(--ink)" text-anchor="end">ESPVR</text>`:`<text x="${W-R-4}" y="${y(V.ees*(VX-V.v0))+16}" font-size="12" fill="var(--ink)" text-anchor="end">ESPVR</text>`;
  }
  svg.innerHTML=s;
 }
 const ro=new ResizeObserver(draw);ro.observe(svg);
 
-const f=(v,d)=>v.toFixed(d);
-const MT=[
- ['sv','一回拍出量 SV','mL',0],['ef','駆出率 EF','%',0],['co','心拍出量 CO','L/min',1],
- ['bp','血圧 収縮期/拡張期','mmHg'],['map','平均血圧 MAP','mmHg',0],
- ['edv','拡張末期容量 EDV','mL',0],['esv','収縮末期容量 ESV','mL',0],['pes','収縮末期圧 Pes','mmHg',0],
- ['ea','Ea','mmHg/mL',2],['cpl','Ea/Ees（カップリング）','',2],
- ['sw','一回仕事量 SW','J',2],['eff','機械効率 SW/PVA','%',0]
-];
-function upd(){
- for(const c of CT)if(c.id){const el=$('#'+c.id);el.value=p[c.id];
-  let t=f(p[c.id],c.d);if(c.id=='r')t+=`<small>${c.u} ≈ ${Math.round(p.r*1333)} dyn</small>`;else t+=`<small>${c.u}</small>`;
-  $('#o-'+c.id).innerHTML=t;}
- const m=model(p),b=base?model(base):null;
- const val=(m,k)=>k=='sw'?m.sw*1.333e-4:m[k];
- $('#met').innerHTML=MT.map(([k,l,u,d])=>{
+/* ---------- 指標 ---------- */
+const fmt=(v,d)=>v.toFixed(d);
+function metricsDef(){
+ if(mode=='a')return[['sv','一回拍出量 SV','mL',0],['ef','駆出率 EF','%',0],['co','心拍出量 CO','L/min',1],['bp','血圧 収縮期/拡張期','mmHg'],['map','平均血圧 MAP','mmHg',0],['edv','拡張末期容量 EDV','mL',0],['esv','収縮末期容量 ESV','mL',0],['pes','収縮末期圧 Pes','mmHg',0],['ea','Ea','mmHg/mL',2],['cpl','Ea/Ees（カップリング）','',2],['swj','一回仕事量 SW','J',2],['eff','機械効率 SW/PVA','%',0]];
+ const L=pp.les,dv=norm(pp.W).edv<30?1:0,m=model(pp);
+ const D={sv:['一回拍出量 SV','mL',dv],ef:['駆出率 EF','%',0],ci:['体血流（心係数）','L/min/m²',1],co:['心室拍出量','L/min',2],bp:['血圧 収縮期/拡張期','mmHg'],map:['平均血圧 MAP','mmHg',0],edv:['拡張末期容量 EDV','mL',dv],esv:['収縮末期容量 ESV','mL',dv],edp:[L=='fontan'?'心室拡張末期圧（計算値）':'拡張末期圧','mmHg',1],cpl:['Ea/Ees（カップリング）','',2],
+  qpqs:['Qp/Qs'+(m.dir?'（'+m.dir+'）':''),'',2],sa:[L=='pda'?'SaO₂（下肢・推定）':'SaO₂（推定）','%',0],ppa:['肺動脈平均圧（推定）','mmHg',0],grad:['右室流出路 平均圧較差','mmHg',0],tpg:['経肺圧較差（肺血流×PVR）','mmHg',1]};
+ const K={normal:['sv','ef','ci','bp','map','edv','esv','edp','cpl'],
+  vsd:['qpqs','ci','sa','co','bp','map','edv','edp','ppa','sv','ef','cpl'],
+  pda:['qpqs','ci','sa','co','bp','map','edv','edp','ppa','sv','ef','cpl'],
+  tof:['sa','qpqs','ci','grad','bp','map','edv','sv','ef','ppa','cpl'],
+  sv:['sa','qpqs','ci','co','bp','map','edv','edp','sv','ef','cpl'],
+  fontan:['ci','edp','tpg','bp','map','edv','sv','ef','cpl']}[L];
+ return K.map((k,i)=>[k,...D[k],i<(L=='normal'||L=='fontan'?0:2)]);
+}
+function updMet(){
+ const m=model(cur()),b=model(base());
+ const val=(o,k)=>k=='swj'?o.sw*1.333e-4:o[k];
+ $('#met').innerHTML=metricsDef().map(([k,l,u,d,key])=>{
   let main,dl='';
   if(k=='bp')main=`${Math.round(m.sbp)}/${Math.round(m.dbp)}`;
-  else{const v=val(m,k);main=f(v,d);
-   if(b){const dv=v-val(b,k);if(Math.abs(dv)>=Math.pow(10,-d)/2)dl=`<em class="${dv>0?'up':'dn'}">${dv>0?'+':'−'}${f(Math.abs(dv),d)}</em>`;}}
-  return `<div class="m"><span>${l}</span><b>${main}${u?`<small>${u}</small>`:''}</b>${dl?`<span>基準比</span>${dl}`:''}</div>`;}).join('');
- draw();
+  else{const v=val(m,k);if(v==null)return'';main=fmt(v,d);
+   const bv=val(b,k);if(bv!=null){const dv=v-bv;if(Math.abs(dv)>=Math.pow(10,-d)/2)dl=`<em class="${dv>0?'up':'dn'}">${dv>0?'+':'−'}${fmt(Math.abs(dv),d)}</em>`}}
+  return `<div class="m${key?' key':''}"><span>${l}</span><b>${main}${u?`<small>${u}</small>`:''}</b>${dl?`<span>基準比</span>${dl}`:''}</div>`}).join('');
 }
-document.addEventListener('input',e=>{if(e.target.type=='range'){p[e.target.id]=+e.target.value;mark(-1);upd();}});
-function mark(i){document.querySelectorAll('#presets button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.i==i));}
-$('#presets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;p={...N,...PR[i][1]};mark(i);upd();});
-$('#pin').addEventListener('click',()=>{base={...p};upd();});
-$('#reset').addEventListener('click',()=>{p={...N};mark(0);upd();});
-base={...N};mark(0);upd();
+
+/* ---------- UI ---------- */
+function ctlDefs(){return mode=='a'?CTA:ctlP(pp)}
+function renderCtl(){
+ $('#ctls').innerHTML=ctlDefs().map(c=>c.g?`<div class="grp">${c.g}</div>`:
+  `<div class="ctl"><label for="c-${c.id}">${c.l}</label><output id="o-${c.id}"></output>
+   <input type="range" id="c-${c.id}" data-k="${c.id}" min="${c.min}" max="${c.max}" step="${c.st}">${c.h?`<div class="hint">${c.h}</div>`:''}</div>`).join('');
+}
+function renderTop(){
+ document.querySelectorAll('#modes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m==mode));
+ $('#pedtop').hidden=mode=='a';
+ $('#lnote').hidden=mode=='a';
+ $('#sclab').textContent=mode=='a'?'プリセット':'シナリオ';
+ $('#reset').textContent=mode=='a'?'正常値に戻す':'この病態の初期値に戻す';
+ if(mode=='p'){
+  $('#lesions').innerHTML=Object.entries(LES).map(([k,v])=>`<button type="button" data-l="${k}" aria-pressed="${k==pp.les}">${v.t}</button>`).join('');
+  $('#lnote').textContent=LES[pp.les].n;
+ }
+ const P=mode=='a'?PRA:LES[pp.les].sc,sel=mode=='a'?presetA:presetP;
+ $('#presets').innerHTML=P.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===sel}">${x[0]}</button>`).join('');
+}
+function vlabel(){
+ if(mode=='a'){$('#vlabel').innerHTML='表示：<b>左室</b>（成人）';return}
+ const N=norm(pp.W);
+ $('#vlabel').innerHTML=`表示：<b>${LES[pp.les].v}</b> ・ ${LES[pp.les].t} ・ ${pp.W} kg（この体格の正常目安：心拍数 ${Math.round(N.hr)}、平均血圧 ${Math.round(N.map)} mmHg、EDV ${N.edv.toFixed(N.edv<30?1:0)} mL）`;
+}
+function upd(){
+ const q=cur();
+ for(const c of ctlDefs())if(c.id){
+  const el=$('#c-'+c.id);if(!el)continue;el.value=q[c.id];
+  $('#o-'+c.id).innerHTML=fmt(+q[c.id],c.d)+`<small>${c.u}${c.x?c.x(q):''}</small>`;
+ }
+ vlabel();updMet();draw();
+}
+function full(){renderTop();renderCtl();upd()}
+function setPreset(i){if(mode=='a')presetA=i;else presetP=i;document.querySelectorAll('#presets button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i))}
+function rescale(q,W){const o=norm(q.W),n=norm(W);q.hr=Math.round(q.hr*n.hr/o.hr);q.svri=q.svri*n.svri/o.svri;q.W=W}
+
+document.addEventListener('input',e=>{
+ const k=e.target.dataset&&e.target.dataset.k;if(!k)return;
+ const v=+e.target.value;
+ if(mode=='a')pa[k]=v;
+ else if(k=='W'){rescale(pp,v);rescale(bp,v)}
+ else pp[k]=v;
+ setPreset(-1);upd();
+});
+$('#modes').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.m==mode)return;mode=b.dataset.m;full()});
+$('#lesions').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const l=b.dataset.l;pp=lesState(l,LES[l].W);bp={...pp};presetP=0;full()});
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
+ if(mode=='a')pa={...NA,...PRA[i][1]};else pp=lesState(pp.les,pp.W,LES[pp.les].sc[i][1]);
+ if(mode=='a')presetA=i;else presetP=i;renderTop();upd()});
+$('#pin').addEventListener('click',()=>{if(mode=='a')ba={...pa};else bp={...pp};upd()});
+$('#reset').addEventListener('click',()=>{if(mode=='a'){pa={...NA};presetA=0}else{pp=lesState(pp.les,pp.W);presetP=0}renderTop();upd()});
+full();
 }
 </script>
 <script>
